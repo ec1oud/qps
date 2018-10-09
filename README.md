@@ -1,8 +1,10 @@
-## Qt Process Manager
+## Qt Process Manager: the Qt Quick TableModel component
 
 ### Building
 
-* Requires Qt 5
+* Requires Qt 5.12 or newer
+* qmake; make; make install
+* qml qtquick/examples/table.qml
 
 ### License
 
