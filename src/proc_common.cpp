@@ -386,7 +386,6 @@ Procview::Procview()
     sort_column = -1;
     sortcat_linear = NULL;
     enable = true;
-    maxSizeHistory = 1200;
     refresh(); // before reading Watchdog list
 }
 
