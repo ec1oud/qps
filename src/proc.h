@@ -25,6 +25,7 @@
 
 #include "config.h"
 #include <QCoreApplication>
+#include <time.h>
 
 #ifdef SOLARIS
 #include <kstat.h> // kstat_ctl_t
@@ -126,7 +127,7 @@ enum fields
     F_END = -1
 };
 
-class Details;
+//class Details;
 
 #ifdef LINUX
 
@@ -521,7 +522,7 @@ class Procinfo // Process Infomation
     char state;
     int ppid; // Parent's PID
     int pgrp;
-    dev_t tty; // tty major:minor device
+    int /* dev_t */ tty; // tty major:minor device
     int type;  // TESTING X,NETWORK,FILE_OPEN,TERMINAL(tty),THREAD,
 
     int nthreads; // number of threads : LWP(Solaris), task(Linux)
@@ -604,7 +605,7 @@ class Procinfo // Process Infomation
     unsigned long env_ofs;
 #endif
 
-    Details *detail; // details window or NULL (backlink)
+//    Details *detail; // details window or NULL (backlink)
 
     unsigned int generation; // timestamp
 

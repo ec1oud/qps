@@ -49,7 +49,7 @@
 #include "proc.h"
 #include "uidstr.h"
 #include "ttystr.h"
-#include "wchan.h"
+//#include "wchan.h"
 
 #ifdef GTK
 #include "detail_gtk.h"

@@ -46,15 +46,15 @@
 //#include "misc.h"			// x_atoi() , userName() ,groupname()
 
 #include "proc.h"
-#include "uidstr.h"
-#include "ttystr.h"
-#include "wchan.h"
+//#include "uidstr.h"
+//#include "ttystr.h"
+//#include "wchan.h"
 
-#ifdef GTK
-#include "detail_gtk.h"
-#else
-#include "details.h" //qt
-#endif
+//#ifdef GTK
+//#include "detail_gtk.h"
+//#else
+//#include "details.h" //qt
+//#endif
 
 #include "proc_common.cpp" // COMMON code !!!!
 
@@ -307,7 +307,7 @@ Procinfo::Procinfo(Proc *system_proc, int process_id, int thread_id) : refcnt(1)
 
     lastchild = 0;
     generation = -1;
-    detail = 0;
+//    detail = 0;
 
     /// per_cpu_times = 0; not yet
 
@@ -351,12 +351,12 @@ Procinfo::~Procinfo()
         void watchdog_check_if_finish(QString cmd, Procinfo * p);
         watchdog_check_if_finish(command, this);
 
-        if (detail)
-        {
-            //	printf("~Procinfo() : pid=%d\n",pid);
-            detail->process_gone();
-            detail = 0;
-        }
+//        if (detail)
+//        {
+//            //	printf("~Procinfo() : pid=%d\n",pid);
+//            detail->process_gone();
+//            detail = 0;
+//        }
 
         //    if(environ)    delete environ;
         if (envblock)
@@ -1648,13 +1648,6 @@ bool Procinfo::read_environ()
     return true;
 }
 
-// CWD,ROOT only so...
-Cat_dir::Cat_dir(const char *heading, const char *explain, const char *dirname,
-                 QString Procinfo::*member)
-    : Cat_string(heading, explain), dir(dirname), cache(member)
-{
-}
-
 QString Cat_dir::string(Procinfo *p)
 {
     if ((p->*cache).isNull())
@@ -1705,11 +1698,6 @@ QString Cat_dir::string(Procinfo *p)
     return p->*cache;
 }
 
-Cat_state::Cat_state(const char *heading, const char *explain)
-    : Category(heading, explain)
-{
-}
-
 QString Cat_state::string(Procinfo *p)
 {
     QString s("   ");
@@ -1719,12 +1707,6 @@ QString Cat_state::string(Procinfo *p)
     s[1] = (p->resident == 0 && p->state != 'Z') ? 'W' : ' ';
     s[2] = (ni > 0) ? 'N' : ((ni < 0) ? '<' : ' ');
     return s;
-}
-
-// LINUX
-Cat_policy::Cat_policy(const char *heading, const char *explain)
-    : Category(heading, explain)
-{
 }
 
 QString Cat_policy::string(Procinfo *p)
@@ -1753,11 +1735,6 @@ int Cat_policy::compare(Procinfo *a, Procinfo *b)
     return b->get_policy() - a->get_policy();
 }
 
-Cat_rtprio::Cat_rtprio(const char *heading, const char *explain)
-    : Category(heading, explain)
-{
-}
-
 QString Cat_rtprio::string(Procinfo *p)
 {
     QString s;
@@ -1768,12 +1745,6 @@ QString Cat_rtprio::string(Procinfo *p)
 int Cat_rtprio::compare(Procinfo *a, Procinfo *b)
 {
     return b->get_rtprio() - a->get_rtprio();
-}
-
-// maybe tms COMMON
-Cat_tms::Cat_tms(const char *heading, const char *explain)
-    : Category(heading, explain)
-{
 }
 
 QString Cat_tms::string(Procinfo *p)
@@ -1790,11 +1761,6 @@ int Cat_tms::compare(Procinfo *a, Procinfo *b)
     return (int)((b->get_tms() - a->get_tms()) * 1000);
 }
 
-Cat_affcpu::Cat_affcpu(const char *heading, const char *explain)
-    : Category(heading, explain)
-{
-}
-
 QString Cat_affcpu::string(Procinfo *p)
 {
     QString s;
@@ -1808,12 +1774,6 @@ QString Cat_affcpu::string(Procinfo *p)
    return (int)(b->affcpu - a->affcpu);
    }
    */
-
-// LINUX or COMMON?
-Cat_time::Cat_time(const char *heading, const char *explain)
-    : Category(heading, explain)
-{
-}
 
 QString Cat_time::string(Procinfo *p)
 {
@@ -1876,12 +1836,6 @@ int Cat_time::compare(Procinfo *a, Procinfo *b)
         bt += b->cutime;
     }
     return bt - at;
-}
-
-// LINUX ?
-Cat_tty::Cat_tty(const char *heading, const char *explain)
-    : Cat_string(heading, explain)
-{
 }
 
 QString Cat_tty::string(Procinfo *p) { return Ttystr::name(p->tty); }
