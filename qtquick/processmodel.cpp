@@ -1,5 +1,6 @@
 #include "processmodel.h"
 #include "../src/proc.h"
+#include <QDebug>
 
 /* ----------------------- Global Variable START ---------------------- */
 bool previous_flag_show_thread_prev = false; // previous state
@@ -39,16 +40,22 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
     fields field = fields(index.column());
     int pid = m_pids[index.row()];
     Procinfo *pi = m_proc.procs.value(pid);
-    switch (field) {
-    case F_PID:
-        return pid;
-    case F_USER:
-        return pi->username;
-    case F_CMD:
-        return pi->command;
-    default:
+    Category *cat = m_proc.categories.value(field);
+    if (!cat) // F_PROCESSNAME probably
         return QString();
-    }
+    return cat->string(pi);
+
+    // Category::string() is pre-existing functionality so we can avoid doing a switch like this:
+//    switch (field) {
+//    case F_PID:
+//        return pid;
+//    case F_USER:
+//        return pi->username;
+//    case F_CMD:
+//        return pi->command;
+//    default:
+//        return QString();
+//    }
 }
 
 ProcessModel::~ProcessModel()
