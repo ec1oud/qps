@@ -1,6 +1,8 @@
 #include "processmodel.h"
 #include "../src/proc.h"
 #include <QDebug>
+#include <QFontMetrics>
+#include <QGuiApplication>
 
 /* ----------------------- Global Variable START ---------------------- */
 bool previous_flag_show_thread_prev = false; // previous state
@@ -73,6 +75,22 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
 //    default:
 //        return QString();
 //    }
+}
+
+int ProcessModel::columnWidth(int c, const QFont *font)
+{
+    if (!m_columnWidths[c]) {
+        Category *cat = m_proc.categories.value(c);
+        if (!cat)
+            return 0;
+        QFontMetrics defaultFontMetrics = QFontMetrics(QGuiApplication::font());
+        QFontMetrics fm = (font ? QFontMetrics(*font) : defaultFontMetrics);
+        int ret = 0;
+        for (int r = 0; r < m_pids.count(); ++r)
+            ret = qMax(ret, fm.width(cat->string(m_proc.procs.value(m_pids[r]))));
+        m_columnWidths[c] = ret;
+    }
+    return m_columnWidths[c];
 }
 
 ProcessModel::~ProcessModel()
