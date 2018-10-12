@@ -20,9 +20,26 @@ ProcessModel::ProcessModel(QObject *parent):
     QAbstractTableModel(parent)
 {
     m_proc.commonPostInit();
+    update();
+    m_timerId = startTimer(5000);
+}
+
+void ProcessModel::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == m_timerId)
+        update();
+}
+
+void ProcessModel::update()
+{
+    beginResetModel();
+    // TODO complete this: tell which rows are inserted and which are removed
+//    beginInsertRows(QModelIndex(), 0, 0);
     m_proc.refresh();
     m_pids = m_proc.procs.keys().toVector();
     std::sort(m_pids.begin(), m_pids.end());
+//    endInsertRows();
+    endResetModel();
 }
 
 int ProcessModel::rowCount(const QModelIndex &parent) const
