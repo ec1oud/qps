@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Controls 2.4
 import org.lxqt.qps 1.0
 
 Rectangle {
@@ -44,6 +45,9 @@ Rectangle {
                 font.preferShaping: false
             }
         }
+
+        ScrollBar.horizontal: ScrollBar { }
+        ScrollBar.vertical: ScrollBar { }
     }
     Shortcut { sequence: StandardKey.Quit; onActivated: Qt.quit() }
 }
