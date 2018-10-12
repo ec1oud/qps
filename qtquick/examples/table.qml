@@ -14,6 +14,7 @@ TableView {
             text: model.display
             width: parent.width
             elide: Text.ElideRight
+            font.preferShaping: false
         }
     }
     Shortcut { sequence: StandardKey.Quit; onActivated: Qt.quit() }
