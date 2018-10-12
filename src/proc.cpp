@@ -513,8 +513,8 @@ Procinfo::~Procinfo()
 {
     if (!clone)
     {
-        void watchdog_check_if_finish(QString cmd, Procinfo * p);
-        watchdog_check_if_finish(command, this);
+//        void watchdog_check_if_finish(QString cmd, Procinfo * p);
+//        watchdog_check_if_finish(command, this);
 
 //        if (detail)
 //        {
