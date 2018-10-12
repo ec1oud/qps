@@ -13,6 +13,7 @@ SOURCES += \
 #        ../src/proc_common.cpp \
         ../src/proc.cpp \
 #        ../src/proc_linux.cpp \
+        ../src/ttystr.cpp \
 
 HEADERS += \
         qtquick_plugin.h \
