@@ -1,6 +1,8 @@
 #include "processmodel.h"
 #include "../src/proc.h"
 #include <QDebug>
+#include <QFontMetrics>
+#include <QGuiApplication>
 
 /* ----------------------- Global Variable START ---------------------- */
 bool previous_flag_show_thread_prev = false; // previous state
@@ -73,6 +75,38 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
 //    default:
 //        return QString();
 //    }
+}
+
+QVariant ProcessModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role != Qt::DisplayRole)
+        return QVariant();
+
+    if (orientation == Qt::Horizontal) {
+        // section is interpreted as column
+        Category *cat = m_proc.categories.value(section);
+        if (!cat)
+            return QString();
+        return cat->name;
+    } else {
+        return QString();
+    }
+}
+
+int ProcessModel::columnWidth(int c, const QFont *font)
+{
+    if (!m_columnWidths[c]) {
+        Category *cat = m_proc.categories.value(c);
+        if (!cat)
+            return 1; // could be zero, but we have to avoid the error "columnWidthProvider did not return a valid width for column"
+        QFontMetrics defaultFontMetrics = QFontMetrics(QGuiApplication::font());
+        QFontMetrics fm = (font ? QFontMetrics(*font) : defaultFontMetrics);
+        int ret = fm.width(headerData(c, Qt::Horizontal).toString() + QLatin1String(" ^")) + 8;
+        for (int r = 0; r < m_pids.count(); ++r)
+            ret = qMax(ret, fm.width(cat->string(m_proc.procs.value(m_pids[r]))));
+        m_columnWidths[c] = ret;
+    }
+    return m_columnWidths[c];
 }
 
 ProcessModel::~ProcessModel()
