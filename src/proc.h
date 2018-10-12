@@ -120,7 +120,7 @@ enum fields
     F_TIME,
     F_CPUNUM,
     F_CMD,
-    F_PROCESSNAME, // NEW
+    F_PROCESSNAME, // NEW and redundant (F_CMD is the same thing)
     F_CWD,
     F_ROOT, //?
     F_CMDLINE,
