@@ -2029,6 +2029,14 @@ QString Cat_time::string(Procinfo *p)
     return s;
 }
 
+QVariant Cat_time::sortable(Procinfo *p)
+{
+    int ticks = p->utime;
+    if (Procview::flag_cumulative)
+        ticks += p->cutime;
+    return ticks;
+}
+
 int Cat_time::compare(Procinfo *a, Procinfo *b)
 {
     int at = a->utime, bt = b->utime;

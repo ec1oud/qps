@@ -53,9 +53,26 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
     int pid = m_pids[index.row()];
     Procinfo *pi = m_proc.procs.value(pid);
     Category *cat = m_proc.categories.value(field);
-    if (!cat) // F_PROCESSNAME probably
-        return QString();
-    return cat->string(pi);
+    switch (role) {
+    case Qt::DisplayRole:
+        if (!cat) // F_PROCESSNAME probably
+            return QString();
+        return cat->string(pi);
+    case Qt::InitialSortOrderRole: {
+        bool numeric = false;
+        if (cat)
+            cat->sortable(pi).toFloat(&numeric);
+        if (numeric)
+            return Qt::DescendingOrder;
+        return Qt::AscendingOrder;
+    }
+    case int(ProcessModel::Role::Sort):
+        if (!cat) // F_PROCESSNAME probably
+            return QVariant();
+        return cat->sortable(pi);
+    default:
+        return QVariant();
+    }
 
     // Category::string() is pre-existing functionality so we can avoid doing a switch like this:
 //    switch (field) {

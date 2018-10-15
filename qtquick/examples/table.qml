@@ -10,6 +10,7 @@ ApplicationWindow {
     header: ToolBar {
         RowLayout {
             anchors.fill: parent
+            anchors.rightMargin: 6
             Switch {
                 id: cbUpdate
                 checked: true
@@ -28,6 +29,11 @@ ApplicationWindow {
             Item {
                 Layout.fillWidth: true
             }
+            TextField {
+                id: tfFilter
+                implicitWidth: parent.width / 4
+                onTextEdited: table.contentY = 0
+            }
         }
     }
     Row {
@@ -43,6 +49,7 @@ ApplicationWindow {
             SortableColumnHeading {
                 width: Math.min(600, table.model.columnWidth(index)); height: parent.height
                 text: table.model.headerData(index, Qt.Horizontal)
+                initialSortOrder: table.model.initialSortOrder(index)
                 onSorting: {
                     for (var i = 0; i < peter.model; ++i)
                         if (i != index)
@@ -57,7 +64,9 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.topMargin: header.height
         columnSpacing: 4; rowSpacing: 4
-        model: SortFilterProcessModel { }
+        model: SortFilterProcessModel {
+            filterText: tfFilter.text
+        }
         Timer {
             interval: sbUpdate.value * 1000
             repeat: true
