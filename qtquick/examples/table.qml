@@ -10,6 +10,7 @@ ApplicationWindow {
     header: ToolBar {
         RowLayout {
             anchors.fill: parent
+            anchors.rightMargin: 6
             Switch {
                 id: cbUpdate
                 checked: true
@@ -27,6 +28,11 @@ ApplicationWindow {
             }
             Item {
                 Layout.fillWidth: true
+            }
+            TextField {
+                id: tfFilter
+                implicitWidth: parent.width / 4
+                onTextEdited: table.contentY = 0
             }
         }
     }
@@ -58,7 +64,9 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.topMargin: header.height
         columnSpacing: 4; rowSpacing: 4
-        model: SortFilterProcessModel { }
+        model: SortFilterProcessModel {
+            filterText: tfFilter.text
+        }
         Timer {
             interval: sbUpdate.value * 1000
             repeat: true

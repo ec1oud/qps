@@ -16,6 +16,17 @@ SortFilterProcessModel::SortFilterProcessModel(QObject *parent)
              << F_RPRI << F_TMS << F_AFFCPU << F_SLPAVG << F_NLWP << F_MAJFLT
              << F_MINFLT << F_TRS << F_DRS << F_STACK << F_SHARE << F_DT << F_IOW
              << F_IOR << F_STAT << F_FLAGS << F_WCHAN << F_WCPU << F_START << F_CPUNUM;
+    setFilterKeyColumn(F_CMDLINE);
+}
+
+void SortFilterProcessModel::setFilterText(QString filterText)
+{
+    if (m_filterText == filterText)
+        return;
+
+    m_filterText = filterText;
+    setFilterRegularExpression(filterText);
+    emit filterTextChanged(m_filterText);
 }
 
 void SortFilterProcessModel::sort(int column, Qt::SortOrder order)
