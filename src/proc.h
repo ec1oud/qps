@@ -37,6 +37,7 @@
 #include <QString>
 #include <QStringList>
 #include <QDir>
+#include <QVariant>
 #endif
 
 class Procinfo;
@@ -221,6 +222,7 @@ class Category
 
     virtual int alignment() = 0;
     virtual QString string(Procinfo *p) = 0;
+    virtual QVariant sortable(Procinfo *p);
     virtual int width() = 0;
     virtual int compare(Procinfo *a, Procinfo *b);
 
@@ -240,6 +242,7 @@ class Cat_int : public Category
             int Procinfo::*member);
     virtual int alignment() { return Qt::AlignRight; };
     virtual QString string(Procinfo *p);
+    QVariant sortable(Procinfo *p) override;
     virtual int width() { return field_width; };
     virtual int compare(Procinfo *a, Procinfo *b);
 
@@ -256,6 +259,7 @@ class Cat_memory : public Category
                unsigned long Procinfo::*member);
     virtual int alignment() { return Qt::AlignRight; };
     virtual QString string(Procinfo *p);
+    QVariant sortable(Procinfo *p) override;
     virtual int width() { return field_width; };
     virtual int compare(Procinfo *a, Procinfo *b);
 
@@ -271,6 +275,7 @@ class Cat_uintl : public Category
               unsigned long Procinfo::*member);
     virtual int alignment() { return Qt::AlignRight; };
     virtual QString string(Procinfo *p);
+    QVariant sortable(Procinfo *p) override;
     virtual int width() { return field_width; };
     virtual int compare(Procinfo *a, Procinfo *b);
 
@@ -293,6 +298,7 @@ class Cat_swap : public Category
     Cat_swap(const QString &heading, const QString &explain);
     virtual int alignment() { return Qt::AlignRight; };
     virtual QString string(Procinfo *p);
+    QVariant sortable(Procinfo *p) override;
     virtual int width() { return 8; };
     virtual int compare(Procinfo *a, Procinfo *b);
 };
@@ -410,6 +416,7 @@ class Cat_time : public Category
     Cat_time(const QString &heading, const QString &explain);
     virtual int alignment() { return Qt::AlignRight; };
     virtual QString string(Procinfo *p);
+    QVariant sortable(Procinfo *p) override;
     virtual int width() { return 7; };
     virtual int compare(Procinfo *a, Procinfo *b);
 };
@@ -430,6 +437,7 @@ class Cat_percent : public Category
     Cat_percent(const QString &heading, const QString &explain, int w,
                 float Procinfo::*member);
     virtual int alignment() { return Qt::AlignRight; };
+    QVariant sortable(Procinfo *p) override;
     virtual QString string(Procinfo *p);
     virtual int width() { return field_width; };
     virtual int compare(Procinfo *a, Procinfo *b);

@@ -92,10 +92,20 @@ int Category::compare(Procinfo *a, Procinfo *b)
     return string(a).compare(string(b));
 }
 
+QVariant Category::sortable(Procinfo *p)
+{
+    return string(p);
+}
+
 Cat_int::Cat_int(const QString &heading, const QString &explain, int w,
                  int Procinfo::*member)
     : Category(heading, explain), int_member(member), field_width(w)
 {
+}
+
+QVariant Cat_int::sortable(Procinfo *p)
+{
+    return QVariant(p->*int_member);
 }
 
 QString Cat_int::string(Procinfo *p)
@@ -117,6 +127,11 @@ Cat_percent::Cat_percent(const QString &heading, const QString &explain, int w,
                          float Procinfo::*member)
     : Category(heading, explain), float_member(member), field_width(w)
 {
+}
+
+QVariant Cat_percent::sortable(Procinfo *p)
+{
+    return p->*float_member;
 }
 
 QString Cat_percent::string(Procinfo *p)
@@ -143,11 +158,9 @@ QString Cat_memory::string(Procinfo *p)
     return locale.formattedDataSize(p->*uintl_member * 1024, 0);
 }
 
-    if (sizeK == 0)
-        s = "0";
-    else
-        s = buff;
-    return s;
+QVariant Cat_memory::sortable(Procinfo *p)
+{
+    return QVariant(qulonglong(p->*uintl_member));
 }
 
 int Cat_memory::compare(Procinfo *a, Procinfo *b)
@@ -167,6 +180,11 @@ QString Cat_uintl::string(Procinfo *p)
     QString s;
     s.setNum(p->*uintl_member);
     return s;
+}
+
+QVariant Cat_uintl::sortable(Procinfo *p)
+{
+    return QVariant(qulonglong(p->*uintl_member));
 }
 
 int Cat_uintl::compare(Procinfo *a, Procinfo *b)
@@ -202,9 +220,10 @@ QString Cat_swap::string(Procinfo *p)
     return locale.formattedDataSize(sizeK * 1024, 0);
 }
 
-    if (sizeK == 0)
-        s = "0";
-    return s;
+QVariant Cat_swap::sortable(Procinfo *p)
+{
+    long sizeK = p->size > p->resident ? p->size - p->resident : 0;
+    return QVariant(qlonglong(sizeK));
 }
 
 int Cat_swap::compare(Procinfo *a, Procinfo *b)
