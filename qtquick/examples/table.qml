@@ -16,7 +16,7 @@ Rectangle {
             id: peter
             model: table.model.columnCount()
             SortableColumnHeading {
-                width: table.model.columnWidth(index); height: parent.height
+                width: Math.min(600, table.model.columnWidth(index)); height: parent.height
                 text: table.model.headerData(index, Qt.Horizontal)
                 onSorting: {
                     for (var i = 0; i < peter.model; ++i)
