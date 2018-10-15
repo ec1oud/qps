@@ -43,6 +43,7 @@ ApplicationWindow {
             SortableColumnHeading {
                 width: Math.min(600, table.model.columnWidth(index)); height: parent.height
                 text: table.model.headerData(index, Qt.Horizontal)
+                initialSortOrder: table.model.initialSortOrder(index)
                 onSorting: {
                     for (var i = 0; i < peter.model; ++i)
                         if (i != index)
