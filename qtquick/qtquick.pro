@@ -14,11 +14,13 @@ SOURCES += \
         ../src/proc.cpp \
 #        ../src/proc_linux.cpp \
         ../src/ttystr.cpp \
+        sortfilterprocessmodel.cpp \
 
 HEADERS += \
         qtquick_plugin.h \
         processmodel.h \
-        ../src/proc.h
+        ../src/proc.h \
+        sortfilterprocessmodel.h \
 
 DISTFILES = qmldir
 OTHER_FILES += examples/*.qml
