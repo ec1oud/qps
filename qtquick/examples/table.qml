@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.4
 import org.lxqt.qps 1.0
+import "../content"
 
 Rectangle {
     width: 1730; height: 720
@@ -12,16 +13,16 @@ Rectangle {
         z: 1
         spacing: 4
         Repeater {
+            id: peter
             model: table.model.columnCount()
-            Rectangle {
+            SortableColumnHeading {
                 width: table.model.columnWidth(index); height: parent.height
-                color: "orange"
-
-                Text {
-                    anchors.verticalCenter: parent.verticalCenter
-                    x: 4
-                    width: parent.width - 4
-                    text: table.model.headerData(index, Qt.Horizontal)
+                text: table.model.headerData(index, Qt.Horizontal)
+                onSorting: {
+                    for (var i = 0; i < peter.model; ++i)
+                        if (i != index)
+                            peter.itemAt(i).stopSorting()
+                    table.model.sort(index, state == "up" ? Qt.AscendingOrder : Qt.DescendingOrder)
                 }
             }
         }
@@ -31,7 +32,7 @@ Rectangle {
         anchors.fill: parent
         anchors.topMargin: header.height
         columnSpacing: 4; rowSpacing: 4
-        model: ProcessModel { }
+        model: SortFilterProcessModel { }
         columnWidthProvider: function(column) { return Math.min(600, model.columnWidth(column)) }
 
         delegate: Rectangle {
