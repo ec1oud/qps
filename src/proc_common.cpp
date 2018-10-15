@@ -37,12 +37,14 @@ int flag_24_ok; // we presume a kernel 2.4.x
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <QLocale>
 
 // COMMON
 bool Procview::treeview = 0; // true
 bool Procview::flag_show_file_path = false;
 bool Procview::flag_cumulative = false;  // times cumulative with children's
 bool Procview::flag_pcpu_single = false; // %CPU= pcpu/num_cpus
+QLocale locale;
 
 // COMMON: basic field
 int Procview::mini_fields[] = {F_PID, F_STAT, F_MEM, F_CPU, F_CMDLINE, F_END};
@@ -138,30 +140,7 @@ Cat_memory::Cat_memory(const QString &heading, const QString &explain, int w,
 
 QString Cat_memory::string(Procinfo *p)
 {
-    QString s;
-    char buff[128];
-
-    long sizeK, sizeM;
-    sizeK = p->*uintl_member;
-
-    sizeM = sizeK / 1024;
-    /*	if ( sizeM > 1024 )
-            {
-                    sprintf(buff,"%dM",sizeM/1024);
-            }
-            else */
-    if (sizeM > 0)
-    {
-        sprintf(buff, "%ldM", sizeM);
-    }
-    else
-        sprintf(buff, "%ldK", sizeK);
-
-    if (sizeK == 0)
-        s = "0";
-    else
-        s = buff;
-    return s;
+    return locale.formattedDataSize(p->*uintl_member * 1024, 0);
 }
 
 int Cat_memory::compare(Procinfo *a, Procinfo *b)
@@ -212,23 +191,8 @@ Cat_swap::Cat_swap(const QString &heading, const QString &explain)
 
 QString Cat_swap::string(Procinfo *p)
 {
-    QString s;
-    // It can actually happen that size < resident (Sun under Solaris 2.6)
-    // Possible with Linux ?
-
-    long sizeK, sizeM;
-    sizeK = p->size > p->resident ? p->size - p->resident : 0;
-
-    sizeM = sizeK / 1024;
-
-    if (sizeM > 0)
-        s = QString::number(sizeM) + "M";
-    else
-        s = QString::number(sizeK) + "K";
-
-    if (sizeK == 0)
-        s = "0";
-    return s;
+    long sizeK = p->size > p->resident ? p->size - p->resident : 0;
+    return locale.formattedDataSize(sizeK * 1024, 0);
 }
 
 int Cat_swap::compare(Procinfo *a, Procinfo *b)
