@@ -11,6 +11,11 @@ class ProcessModel : public QAbstractTableModel
     Q_DISABLE_COPY(ProcessModel)
 
 public:
+    // supplemental roles beyond Qt::ItemDataRole
+    enum class Role {
+        Sort = Qt::UserRole
+    };
+
     ProcessModel(QObject *parent = nullptr);
     ~ProcessModel();
     int rowCount(const QModelIndex &parent) const override;

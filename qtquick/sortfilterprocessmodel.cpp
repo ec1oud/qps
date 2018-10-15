@@ -5,6 +5,7 @@ SortFilterProcessModel::SortFilterProcessModel(QObject *parent)
   : QSortFilterProxyModel (parent)
 {
     setSourceModel(&m_processModel);
+    setSortRole(int(ProcessModel::Role::Sort));
     // default fields that "top" displays
     m_fields << F_PID << F_USER << F_PRI << F_NICE << F_SIZE << F_RSS
              << F_CPU << F_PMEM << F_TIME << F_PLCY << F_CMD
