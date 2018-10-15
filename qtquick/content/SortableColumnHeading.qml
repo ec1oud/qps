@@ -3,6 +3,7 @@ import QtQuick 2.12
 Rectangle {
     id: root
     color: "wheat"
+    property int initialSortOrder: Qt.AscendingOrder
     property alias text: label.text
     signal sorting
 
@@ -30,13 +31,14 @@ Rectangle {
     TapHandler { id: tap; onTapped: nextState() }
 
     function nextState() {
-        if (state == "up")
+        if (state == "")
+            state = (initialSortOrder == Qt.DescendingOrder ? "down" : "up")
+        else if (state == "up")
             state = "down"
         else
             state = "up"
         root.sorting()
     }
-
     states: [
         State {
             name: "up"

@@ -37,6 +37,18 @@ int SortFilterProcessModel::columnWidth(int c, const QFont *font)
     return m_processModel.columnWidth(m_fields[c], font);
 }
 
+Qt::SortOrder SortFilterProcessModel::initialSortOrder(int column) const
+{
+    bool ok = false;
+    if (column < 0 || column >= m_fields.count())
+        return Qt::AscendingOrder;
+    int ret = m_processModel.data(m_processModel.index(0, m_fields[column]), Qt::InitialSortOrderRole).toInt(&ok);
+    if (ok)
+        return Qt::SortOrder(ret);
+    else
+        return Qt::AscendingOrder;
+}
+
 QModelIndex SortFilterProcessModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
     int row = QSortFilterProxyModel::mapFromSource(sourceIndex).row();

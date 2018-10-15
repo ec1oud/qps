@@ -58,6 +58,14 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
         if (!cat) // F_PROCESSNAME probably
             return QString();
         return cat->string(pi);
+    case Qt::InitialSortOrderRole: {
+        bool numeric = false;
+        if (cat)
+            cat->sortable(pi).toFloat(&numeric);
+        if (numeric)
+            return Qt::DescendingOrder;
+        return Qt::AscendingOrder;
+    }
     case int(ProcessModel::Role::Sort):
         if (!cat) // F_PROCESSNAME probably
             return QVariant();
