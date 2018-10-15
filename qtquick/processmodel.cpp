@@ -23,13 +23,6 @@ ProcessModel::ProcessModel(QObject *parent):
 {
     m_proc.commonPostInit();
     update();
-    m_timerId = startTimer(1000);
-}
-
-void ProcessModel::timerEvent(QTimerEvent *event)
-{
-    if (event->timerId() == m_timerId)
-        update();
 }
 
 void ProcessModel::update()

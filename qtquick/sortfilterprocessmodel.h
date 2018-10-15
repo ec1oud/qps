@@ -9,6 +9,7 @@ class SortFilterProcessModel : public QSortFilterProxyModel
 {
     Q_OBJECT
     Q_PROPERTY(ProcessModel *processModel READ processModel CONSTANT)
+    Q_CLASSINFO("DefaultProperty", "data")
 public:
     SortFilterProcessModel(QObject *parent = nullptr);
 

@@ -1,14 +1,39 @@
 import QtQuick 2.12
+import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.4
 import org.lxqt.qps 1.0
 import "../content"
 
-Rectangle {
-    width: 1730; height: 720
+ApplicationWindow {
+    title: qsTr("top")
+    width: 1730; height: 720; visible: true
+    header: ToolBar {
+        RowLayout {
+            anchors.fill: parent
+            Switch {
+                id: cbUpdate
+                checked: true
+                text: qsTr("Update every")
+            }
+            SpinBox {
+                id: sbUpdate
+                from: 1
+                to: 60
+                value: 2
+                enabled: cbUpdate.checked
+            }
+            Label {
+                text: "sec"
+            }
+            Item {
+                Layout.fillWidth: true
+            }
+        }
+    }
     Row {
         id: header
         width: table.contentWidth
-        height: 40
+        height: cbUpdate.height
         x: -table.contentX
         z: 1
         spacing: 4
@@ -33,6 +58,12 @@ Rectangle {
         anchors.topMargin: header.height
         columnSpacing: 4; rowSpacing: 4
         model: SortFilterProcessModel { }
+        Timer {
+            interval: sbUpdate.value * 1000
+            repeat: true
+            running: cbUpdate.checked
+            onTriggered: table.model.processModel.update()
+        }
         columnWidthProvider: function(column) { return Math.min(600, model.columnWidth(column)) }
 
         delegate: Rectangle {
