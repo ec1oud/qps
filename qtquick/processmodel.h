@@ -15,7 +15,8 @@ public:
     enum class Role {
         Sort = Qt::UserRole,
         Number,
-        Type
+        Type,
+        FirstDataRole // here begins the data field roles
     };
     Q_ENUM(Role)
 
@@ -29,6 +30,9 @@ public:
                         int role = Qt::DisplayRole) const override;
     Q_INVOKABLE int columnWidth(int c, const QFont *font = nullptr);
     Q_INVOKABLE void update();
+
+private:
+    void insertFieldRoles();
 
 private:
     Proc m_proc; // the proctologist
