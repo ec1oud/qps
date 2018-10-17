@@ -26,8 +26,89 @@ ProcessModel::ProcessModel(QObject *parent):
     m_roleNames.insert(int(Role::Sort), QByteArray("sort"));
     m_roleNames.insert(int(Role::Number), QByteArray("number"));
     m_roleNames.insert(int(Role::Type), QByteArray("type"));
+    insertFieldRoles();
     m_proc.commonPostInit();
     update();
+}
+
+void ProcessModel::insertFieldRoles()
+{
+    int fdr = int(Role::FirstDataRole);
+    m_roleNames.insert(fdr + F_PID, QByteArray("pid"));
+#ifdef LINUX
+    m_roleNames.insert(fdr + F_TGID, QByteArray("tgid"));
+#endif
+    m_roleNames.insert(fdr + F_PPID, QByteArray("ppid"));
+    m_roleNames.insert(fdr + F_PGID, QByteArray("pgid"));
+    m_roleNames.insert(fdr + F_SID, QByteArray("sid"));
+    m_roleNames.insert(fdr + F_TTY, QByteArray("tty"));
+#ifdef LINUX
+    m_roleNames.insert(fdr + F_TPGID, QByteArray("tpgid"));
+#endif
+#ifdef MOSIX
+    m_roleNames.insert(fdr + F_MIGR, QByteArray("migr"));
+    m_roleNames.insert(fdr + F_LOCKED, QByteArray("locked"));
+    m_roleNames.insert(fdr + F_NMIGS, QByteArray("nmigs"));
+    m_roleNames.insert(fdr + F_NOMOVE, QByteArray("nomove"));
+    m_roleNames.insert(fdr + F_RPID, QByteArray("rpid"));
+#endif
+    m_roleNames.insert(fdr + F_USER, QByteArray("user"));
+    m_roleNames.insert(fdr + F_GROUP, QByteArray("group"));
+    m_roleNames.insert(fdr + F_UID, QByteArray("uid"));
+    m_roleNames.insert(fdr + F_EUID, QByteArray("euid"));
+#ifdef LINUX
+    m_roleNames.insert(fdr + F_SUID, QByteArray("suid"));
+    m_roleNames.insert(fdr + F_FSUID, QByteArray("fsuid"));
+#endif
+    m_roleNames.insert(fdr + F_GID, QByteArray("gid"));
+    m_roleNames.insert(fdr + F_EGID, QByteArray("egid"));
+#ifdef LINUX
+    m_roleNames.insert(fdr + F_SGID, QByteArray("sgid"));
+    m_roleNames.insert(fdr + F_FSGID, QByteArray("fsgid"));
+#endif
+    m_roleNames.insert(fdr + F_PRI, QByteArray("pri"));
+    m_roleNames.insert(fdr + F_NICE, QByteArray("nice"));
+    m_roleNames.insert(fdr + F_PLCY, QByteArray("plcy"));
+    m_roleNames.insert(fdr + F_RPRI, QByteArray("rpri"));
+#ifdef LINUX
+    m_roleNames.insert(fdr + F_TMS, QByteArray("tms"));
+    m_roleNames.insert(fdr + F_AFFCPU, QByteArray("affcpu"));
+    m_roleNames.insert(fdr + F_SLPAVG, QByteArray("slpavg"));
+#endif
+    m_roleNames.insert(fdr + F_NLWP, QByteArray("nlwp"));
+#ifdef SOLARIS
+    m_roleNames.insert(fdr + F_ARCH, QByteArray("arch"));
+#endif
+    m_roleNames.insert(fdr + F_MAJFLT, QByteArray("majflt"));
+    m_roleNames.insert(fdr + F_MINFLT, QByteArray("minflt"));
+#ifdef LINUX
+    m_roleNames.insert(fdr + F_TRS, QByteArray("trs"));
+    m_roleNames.insert(fdr + F_DRS, QByteArray("drs"));
+    m_roleNames.insert(fdr + F_STACK, QByteArray("stack"));
+#endif
+    m_roleNames.insert(fdr + F_SIZE, QByteArray("size"));
+    m_roleNames.insert(fdr + F_SWAP, QByteArray("swap"));
+    m_roleNames.insert(fdr + F_MEM, QByteArray("mem"));
+    m_roleNames.insert(fdr + F_RSS, QByteArray("rss"));
+#ifdef LINUX
+    m_roleNames.insert(fdr + F_SHARE, QByteArray("share"));
+    m_roleNames.insert(fdr + F_DT, QByteArray("dt"));
+    m_roleNames.insert(fdr + F_IOW, QByteArray("iow"));
+    m_roleNames.insert(fdr + F_IOR, QByteArray("ior"));
+#endif
+    m_roleNames.insert(fdr + F_STAT, QByteArray("stat"));
+    m_roleNames.insert(fdr + F_FLAGS, QByteArray("flags"));
+    m_roleNames.insert(fdr + F_WCHAN, QByteArray("wchan"));
+    m_roleNames.insert(fdr + F_WCPU, QByteArray("wcpu"));
+    m_roleNames.insert(fdr + F_CPU, QByteArray("cpu"));
+    m_roleNames.insert(fdr + F_PMEM, QByteArray("pmem"));
+    m_roleNames.insert(fdr + F_START, QByteArray("start"));
+    m_roleNames.insert(fdr + F_TIME, QByteArray("time"));
+    m_roleNames.insert(fdr + F_CPUNUM, QByteArray("cpunum"));
+    m_roleNames.insert(fdr + F_CMD, QByteArray("cmd"));
+    m_roleNames.insert(fdr + F_CWD, QByteArray("cwd"));
+    m_roleNames.insert(fdr + F_ROOT, QByteArray("root"));
+    m_roleNames.insert(fdr + F_CMDLINE, QByteArray("cmdline"));
 }
 
 QHash<int, QByteArray> ProcessModel::roleNames() const
@@ -120,6 +201,9 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
             return QLatin1String("string");
         }
     default:
+        if (role >= int(Role::FirstDataRole))
+            // convert the data role to a column and get the DisplayRole
+            return data(QAbstractTableModel::index(index.row(), role - int(Role::FirstDataRole)), Qt::DisplayRole);
         return QVariant();
     }
 
