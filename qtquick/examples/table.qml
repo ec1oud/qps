@@ -4,6 +4,7 @@ import QtQuick.Controls 2.4
 import org.lxqt.qps 1.0
 import Qt.labs.qmlmodels 1.0
 import "../content"
+import "."
 
 ApplicationWindow {
     title: qsTr("top")
@@ -60,68 +61,13 @@ ApplicationWindow {
             }
         }
     }
-    TableView {
+    TableView2 {
         id: table
         anchors.fill: parent
         anchors.topMargin: header.height
-        columnSpacing: 4; rowSpacing: 4
-        model: SortFilterProcessModel {
-            filterText: tfFilter.text
-        }
-        Timer {
-            interval: sbUpdate.value * 1000
-            repeat: true
-            running: cbUpdate.checked
-            onTriggered: table.model.processModel.update()
-        }
-        columnWidthProvider: function(column) { return Math.min(600, model.columnWidth(column)) }
-
-        delegate: DelegateChooser {
-            role: "type"
-            DelegateChoice {
-                roleValue: "%"
-                ProgressBar {
-                    value: model.number / 100
-                    Text {
-                        text: model.number.toFixed(1) + "%"
-                        width: parent.width
-                        horizontalAlignment: Text.AlignRight
-                        font.preferShaping: false
-                    }
-                }
-            }
-            DelegateChoice {
-                roleValue: "string"
-                Rectangle {
-                    color: "#EEE"
-                    implicitHeight: stringText.implicitHeight
-                    Text {
-                        id: stringText
-                        text: model.display
-                        width: parent.width
-                        elide: Text.ElideRight
-                        font.preferShaping: false
-                    }
-                }
-            }
-            DelegateChoice {
-                Rectangle {
-                    color: "#EEE"
-                    implicitHeight: defaultText.implicitHeight
-                    Text {
-                        id: defaultText
-                        text: model.display
-                        width: parent.width
-                        elide: Text.ElideRight
-                        horizontalAlignment: Text.AlignRight
-                        font.preferShaping: false
-                    }
-                }
-            }
-        }
-
-        ScrollBar.horizontal: ScrollBar { }
-        ScrollBar.vertical: ScrollBar { }
+        updateInterval: sbUpdate.value * 1000
+        updateEnabled: cbUpdate.checked
+        filterText: tfFilter.text
     }
     Shortcut { sequence: StandardKey.Quit; onActivated: Qt.quit() }
 }
