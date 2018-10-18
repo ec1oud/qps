@@ -1747,9 +1747,40 @@ bool Procinfo::read_maps()
     return true;
 }
 
+int fsize(char *fname)
+{
+    int size = 0;
+    if (0)
+    {
+        // !!! important !! not works with [/proc] , because [/proc/*]
+        // always zero
+        int fd = open(fname, O_RDONLY);
+        if (fd < 0)
+            return -1;
+        size = lseek(fd, 0, SEEK_END);
+        printf("size=%d\n", size);
+        close(fd);
+        return size;
+    }
+
+    int buf[1024];
+    int r;
+    int fd = open(fname, O_RDONLY);
+    if (fd < 0)
+        return -1;
+    do
+    {
+        r = read(fd, buf, 1024);
+        size += r;
+        //      printf("r_size=%d\n",size);
+    } while (r);
+    // printf("size=%d\n",size);
+    close(fd);
+    return size;
+}
+
 // DRAFT CODE:
 // return true if /proc/777/environ could be read, false otherwise
-int fsize(char *fname);
 bool Procinfo::read_environ()
 {
     int file_size = 0;
