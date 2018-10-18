@@ -70,6 +70,45 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
         if (!cat) // F_PROCESSNAME probably
             return QVariant();
         return cat->sortable(pi);
+    case int(ProcessModel::Role::Number):
+        if (!cat) // F_PROCESSNAME probably
+            return -1;
+        return cat->sortable(pi).toDouble();
+    case int(ProcessModel::Role::Type):
+        // TODO this is silly: make a virtual in the Category perhaps?
+        switch (field) {
+        case F_CPU:
+        case F_PMEM:
+            return QLatin1String("%");
+        case F_PID:
+        case F_SID:
+        case F_TPGID:
+        case F_EUID:
+        case F_SUID:
+        case F_FSUID:
+        case F_SGID:
+            return QLatin1String("id");
+        case F_SIZE:
+        case F_RSS:
+        case F_TRS:
+        case F_DRS:
+        case F_STACK:
+        case F_SHARE:
+        case F_IOW:
+        case F_IOR:
+            return QLatin1String("size");
+        case F_PRI:
+        case F_NICE:
+        case F_RPRI:
+        case F_MAJFLT:
+        case F_MINFLT:
+        case F_WCPU:
+            return QLatin1String("int");
+        case F_FLAGS:
+            return QLatin1String("flags");
+        default:
+            return QLatin1String("string");
+        }
     default:
         return QVariant();
     }

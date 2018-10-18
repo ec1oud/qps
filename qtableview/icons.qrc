@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/">
+    <file>icons/expand-horizontal-64.png</file>
+    <file>icons/expand-horizontal-16.png</file>
+    <file>icons/expand-horizontal-32.png</file>
+    <file>icons/expand-horizontal.png</file>
+    <file>icons/expand-horizontal.svg</file>
+  </qresource>
+</RCC>

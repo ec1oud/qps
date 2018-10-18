@@ -13,8 +13,11 @@ class ProcessModel : public QAbstractTableModel
 public:
     // supplemental roles beyond Qt::ItemDataRole
     enum class Role {
-        Sort = Qt::UserRole
+        Sort = Qt::UserRole,
+        Number,
+        Type
     };
+    Q_ENUM(Role)
 
     ProcessModel(QObject *parent = nullptr);
     ~ProcessModel();
