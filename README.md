@@ -4,7 +4,7 @@
 
 * Requires Qt 5.12 or newer
 * qmake; make; make install
-* qml qtquick/examples/table.qml
+* qtquick/examples/table.qml
 
 ### License
 
