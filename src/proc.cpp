@@ -70,6 +70,7 @@ extern bool flag_devel;
 
 int pagesize;
 int Proc::update_msec = 1024;
+bool Proc::inited =false;
 
 // socket states, from <linux/net.h> and touched to avoid name collisions
 enum
@@ -392,6 +393,7 @@ void Proc::init_static()
     pagesize = sysconf(_SC_PAGESIZE); // same getpagesize()  in <unistd.h>
     //	printf("pagesize=%d, %d\n",getpagesize(),
     // sysconf(_SC_PAGESIZE)); //4027
+    inited = false;
 }
 
 //  tricky function...(by fasthyun@magicn.com)
@@ -913,7 +915,6 @@ void Proc::read_loadavg()
 
 int Proc::countCpu()
 {
-    static bool first_run = true;
     char path[80];
     char buf[1024 * 8]; // for SMP
 
@@ -959,14 +960,13 @@ int Proc::countCpu()
 // 		-1 : too fast refresh !
 int Proc::read_system() //
 {
-    static bool first_run = true;
     char path[80];
     char buf[1024 * 8]; // for SMP
 
     char *p;
     int n;
 
-    if (first_run)
+    if (!inited)
     {
         /* Version 2.4.x ? */
         strcpy(path, "/proc/vmstat");
@@ -1021,7 +1021,7 @@ int Proc::read_system() //
                 old_cpu_times(cpu, i) = 0;
             }
 
-        // first_run=false; // not yet , at the bottom of this function
+        // inited=true; // not yet , at the bottom of this function
     }
 
     // read system status  /proc/stat
@@ -1126,7 +1126,7 @@ int Proc::read_system() //
 
     load_cpu = (float)Proc::dt_used / Proc::dt_total; // COMMON
 
-    if (first_run)
+    if (!inited)
     {
         //	printf("\n==================== tooo fast
         //=================================\n");
@@ -1228,7 +1228,7 @@ int Proc::read_system() //
     p = strstr(buf, "SwapTotal:");
     sscanf(p, "SwapTotal: %d kB\nSwapFree: %d kB\n", &swap_total, &swap_free);
 
-    first_run = false;
+    inited = true;
     return 0;
 }
 

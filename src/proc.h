@@ -781,6 +781,7 @@ Q_DECLARE_TR_FUNCTIONS(Proc)
 
     unsigned int current_gen;
     int maxSizeHistory;
+    static bool inited;
 };
 
 class Procview : public Proc
