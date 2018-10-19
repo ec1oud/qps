@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QLayoutItem>
 #include "../qtquick/sortfilterprocessmodel.h"
+#include "bargraphdelegate.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,6 +18,11 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     delete ui->toolbarStuff;
     ui->toolbarStuff = nullptr;
+    BarGraphDelegate *bar = new BarGraphDelegate(this);
+    for (int c = 0; c < m_model.columnCount(); ++c) {
+        if (m_model.data(m_model.index(0, c), int(ProcessModel::Role::Type)).toString() == QLatin1String("%"))
+            ui->tableView->setItemDelegateForColumn(c, bar);
+    }
 }
 
 MainWindow::~MainWindow()

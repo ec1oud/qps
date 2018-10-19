@@ -32,11 +32,13 @@ SOURCES += \
         ../src/proc.cpp \
         ../src/ttystr.cpp \
         ../src/uidstr.cpp \
+    bargraphdelegate.cpp
 
 HEADERS += \
         mainwindow.h \
         ../qtquick/sortfilterprocessmodel.h \
         ../qtquick/processmodel.h \
+    bargraphdelegate.h
 
 FORMS += \
         mainwindow.ui
