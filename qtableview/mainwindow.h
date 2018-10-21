@@ -1,7 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QAction>
 #include <QMainWindow>
+#include <QMenu>
 #include "../qtquick/sortfilterprocessmodel.h"
 
 namespace Ui {
@@ -35,9 +37,12 @@ protected:
 private slots:
     void on_actionQuit_triggered();
 
+    void on_tableView_customContextMenuRequested(const QPoint &pos);
+
 private:
     Ui::MainWindow *ui;
     SortFilterProcessModel m_model;
+    QMenu *m_contextMenu = new QMenu(this);
     int m_timerId = -1;
     int m_updateInterval = -1;
 };

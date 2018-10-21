@@ -79,6 +79,9 @@
     </item>
     <item>
      <widget class="QTableView" name="tableView">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
       <property name="sortingEnabled">
        <bool>true</bool>
       </property>
@@ -123,6 +126,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionKillProcess">
+   <property name="text">
+    <string>Kill Process</string>
    </property>
   </action>
  </widget>
