@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QLayoutItem>
+#include <QScroller>
 #include "../qtquick/sortfilterprocessmodel.h"
 #include "bargraphdelegate.h"
 
@@ -14,6 +15,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView->resizeColumnsToContents();
     while (ui->toolbarStuff->count()) {
         QWidget *tw = ui->toolbarStuff->takeAt(0)->widget();
+        if (!tw)
+            continue;
+        tw->setAttribute(Qt::WA_AcceptTouchEvents);
         ui->mainToolBar->addWidget(tw);
     }
     delete ui->toolbarStuff;
@@ -24,6 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
             ui->tableView->setItemDelegateForColumn(c, bar);
     }
     m_contextMenu->addAction(ui->actionKillProcess);
+    QScroller::grabGesture(ui->tableView, QScroller::TouchGesture);
 }
 
 MainWindow::~MainWindow()
