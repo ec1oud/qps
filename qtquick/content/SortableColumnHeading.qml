@@ -7,7 +7,9 @@ Rectangle {
     property alias text: label.text
     property real initialWidth: 100
     signal sorting
+    signal dropped(real x)
     width: splitter.x + 6
+    z: dragHandler.active ? 1 : 0
 
     function stopSorting() {
         state = ""
@@ -41,6 +43,11 @@ Rectangle {
             yAxis.enabled: false
             onActiveChanged: if (!active) table.forceLayout()
         }
+    }
+
+    DragHandler {
+        id: dragHandler
+        onActiveChanged: if (!active) root.dropped(centroid.scenePosition.x)
     }
 
     function nextState() {

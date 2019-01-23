@@ -47,6 +47,11 @@ ApplicationWindow {
         x: -table.contentX
         z: 1
         spacing: 4
+        function forceLayout() {
+            headerRepeater.model = 0
+            headerRepeater.model = table.model.columnCount()
+        }
+
         Repeater {
             id: headerRepeater
             model: table.model.columnCount()
@@ -59,6 +64,10 @@ ApplicationWindow {
                         if (i != index)
                             headerRepeater.itemAt(i).stopSorting()
                     table.model.sort(index, state == "up" ? Qt.AscendingOrder : Qt.DescendingOrder)
+                }
+                onDropped: {
+                    table.model.reorderColumn(index, x)
+                    header.forceLayout()
                 }
             }
         }

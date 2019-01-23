@@ -60,6 +60,23 @@ Qt::SortOrder SortFilterProcessModel::initialSortOrder(int column) const
         return Qt::AscendingOrder;
 }
 
+void SortFilterProcessModel::reorderColumn(int col, int x)
+{
+    // It would be strange for this function to take QFont as an argument,
+    // so maybe the font needs to be a property so that SortFilterProcessModel always knows.
+    int xc = columnWidth(0);
+    int destCol = 0;
+    while (xc < x && destCol < m_fields.count())
+        xc += columnWidth(++destCol); // assuming default font
+    if (col == destCol)
+        return;
+    qDebug() << "reordering col" << col << headerData(col, Qt::Horizontal).toString() << "@" << x
+             << "before" << destCol << headerData(destCol, Qt::Horizontal).toString() << "@" << xc;
+    beginMoveColumns(QModelIndex(), col, col, index(0, destCol), destCol);
+    m_fields.insert(destCol, m_fields.takeAt(col));
+    endMoveColumns();
+}
+
 QModelIndex SortFilterProcessModel::mapFromSource(const QModelIndex &sourceIndex) const
 {
     int row = QSortFilterProxyModel::mapFromSource(sourceIndex).row();
