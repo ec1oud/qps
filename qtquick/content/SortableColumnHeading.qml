@@ -5,7 +5,9 @@ Rectangle {
     color: "wheat"
     property int initialSortOrder: Qt.AscendingOrder
     property alias text: label.text
+    property real initialWidth: 100
     signal sorting
+    width: splitter.x + 6
 
     function stopSorting() {
         state = ""
@@ -29,6 +31,17 @@ Rectangle {
     }
 
     TapHandler { id: tap; onTapped: nextState() }
+
+    Item {
+        id: splitter
+        x: root.initialWidth - 6
+        width: 12
+        height: parent.height + 10
+        DragHandler {
+            yAxis.enabled: false
+            onActiveChanged: if (!active) table.forceLayout()
+        }
+    }
 
     function nextState() {
         if (state == "")

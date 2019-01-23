@@ -18,7 +18,6 @@ TableView {
         running: true
         onTriggered: table.model.processModel.update()
     }
-    columnWidthProvider: function(column) { return Math.min(600, model.columnWidth(column)) }
 
     delegate: DelegateChooser {
         role: "type"

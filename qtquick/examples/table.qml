@@ -48,16 +48,16 @@ ApplicationWindow {
         z: 1
         spacing: 4
         Repeater {
-            id: peter
+            id: headerRepeater
             model: table.model.columnCount()
             SortableColumnHeading {
-                width: Math.min(600, table.model.columnWidth(index)); height: parent.height
+                initialWidth: Math.min(600, table.model.columnWidth(index)); height: parent.height
                 text: table.model.headerData(index, Qt.Horizontal)
                 initialSortOrder: table.model.initialSortOrder(index)
                 onSorting: {
-                    for (var i = 0; i < peter.model; ++i)
+                    for (var i = 0; i < headerRepeater.model; ++i)
                         if (i != index)
-                            peter.itemAt(i).stopSorting()
+                            headerRepeater.itemAt(i).stopSorting()
                     table.model.sort(index, state == "up" ? Qt.AscendingOrder : Qt.DescendingOrder)
                 }
             }
@@ -70,6 +70,7 @@ ApplicationWindow {
         updateInterval: sbUpdate.value * 1000
         updateEnabled: cbUpdate.checked
         filterText: tfFilter.text
+        columnWidthProvider: function(column) { return headerRepeater.itemAt(column).width }
     }
     Shortcut { sequence: StandardKey.Quit; onActivated: Qt.quit() }
 }
